@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Warcry Tracker</title>
+  <style>
+    table { border-collapse: collapse; }
+    th, td { border: 1px solid #ccc; padding: 4px; }
+    form { display: inline; margin: 0; }
+  </style>
+</head>
+<body>
+  <h1>Warcry Tracker</h1>
+
+  <form action="/newround" method="post">
+    <button type="submit">Start New Round</button>
+  </form>
+
+  <h2>Add Fighter</h2>
+  <form action="/fighters" method="post">
+    Name: <input type="text" name="name" required>
+    HP: <input type="number" name="hp" value="10" min="1" required>
+    <button type="submit">Add</button>
+  </form>
+
+  <h2>Fighters</h2>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>HP</th>
+      <th>Activated</th>
+      <th>Items</th>
+      <th>Actions</th>
+    </tr>
+    <% @fighters.each do |f| %>
+    <tr>
+      <td><%= f.name %></td>
+      <td><%= f.hp %>/<%= f.max_hp %></td>
+      <td><%= f.activated ? 'Yes' : 'No' %></td>
+      <td><%= f.items.join(', ') %></td>
+      <td>
+        <form action="/fighters/<%= f.name %>/damage" method="post">
+          <input type="number" name="amount" min="1" value="1" style="width:60px">
+          <button type="submit">Damage</button>
+        </form>
+        <form action="/fighters/<%= f.name %>/heal" method="post">
+          <input type="number" name="amount" min="1" value="1" style="width:60px">
+          <button type="submit">Heal</button>
+        </form>
+        <% if f.activated %>
+          <form action="/fighters/<%= f.name %>/deactivate" method="post">
+            <button type="submit">Deactivate</button>
+          </form>
+        <% else %>
+          <form action="/fighters/<%= f.name %>/activate" method="post">
+            <button type="submit">Activate</button>
+          </form>
+        <% end %>
+        <form action="/fighters/<%= f.name %>/give" method="post">
+          <input type="text" name="item" placeholder="Item" style="width:70px">
+          <button type="submit">Give</button>
+        </form>
+        <form action="/fighters/<%= f.name %>/take" method="post">
+          <input type="text" name="item" placeholder="Item" style="width:70px">
+          <button type="submit">Take</button>
+        </form>
+      </td>
+    </tr>
+    <% end %>
+  </table>
+</body>
+</html>
