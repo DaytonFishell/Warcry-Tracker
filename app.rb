@@ -78,6 +78,11 @@ class Tracker
   end
 end
 
+# Configure Sinatra for external access
+set :bind, '0.0.0.0'
+set :port, 4567
+set :protection, except: [:host_authorization]
+
 tracker = Tracker.new
 
 get '/' do
