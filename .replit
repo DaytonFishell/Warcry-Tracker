@@ -1,0 +1,24 @@
+modules = ["ruby-3.2", "web"]
+run = "ruby app.rb"
+
+[nix]
+channel = "stable-25_05"
+
+[deployment]
+run = ["sh", "-c", "ruby app.rb"]
+
+[[ports]]
+localPort = 4567
+externalPort = 80
+exposeLocalhost = true
+
+[workflows]
+
+[[workflows.workflow]]
+name = "Run"
+mode = "sequential"
+author = 42796836
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "ruby app.rb"
